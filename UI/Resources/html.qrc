@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/">
+        <file>help/appendx.htm</file>
+        <file>help/brom_adapter.htm</file>
+        <file>help/Command.htm</file>
+        <file>help/ConfigFile.htm</file>
+        <file>help/console.htm</file>
+        <file>help/dl_mode.htm</file>
+        <file>help/dl_options.htm</file>
+        <file>help/dl_process_show.htm</file>
+        <file>help/dl_steps.htm</file>
+        <file>help/Download.htm</file>
+        <file>help/DownloadOption.htm</file>
+        <file>help/enterAdvMode.htm</file>
+        <file>help/Format.htm</file>
+        <file>help/General.htm</file>
+        <file>help/Install.htm</file>
+        <file>help/memoryTest.htm</file>
+        <file>help/operation.htm</file>
+        <file>help/option.htm</file>
+        <file>help/pressure.htm</file>
+        <file>help/readback.htm</file>
+        <file>help/readback_auto.htm</file>
+        <file>help/readback_manual.htm</file>
+        <file>help/welcome.htm</file>
+        <file>help/write_memory.htm</file>
+        <file>help/DLCert.htm</file>
+    </qresource>
+</RCC>

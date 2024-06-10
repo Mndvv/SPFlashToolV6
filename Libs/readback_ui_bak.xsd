@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <!-- define chip name data type -->
+  <xs:simpleType name="chipNameType">
+    <xs:restriction base="xs:token">
+	  <xs:pattern value="MT[0-9]{4}[A-Z]{0,1}|ELBRUS"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <!-- define storage data type -->
+  <xs:simpleType name="storageType">
+    <xs:restriction base="xs:token">
+	  <xs:pattern value="NAND|EMMC|UFS|NOR|SDMMC"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <!-- define general node data type -->
+  <xs:complexType name="generalType">
+    <xs:sequence>
+	  <xs:element name="chip-name" type="chipNameType"/>
+      <xs:element name="storage-type" type="storageType"/>
+	</xs:sequence>
+  </xs:complexType>
+  
+  <!-- define general node schema -->
+  <xs:element name="general" type="generalType"/>
+  
+  <!-- define region-text attribute schema -->
+  <xs:attribute name="region-text">
+    <xs:simpleType>
+	  <xs:restriction base="xs:token">
+	    <xs:pattern value="EMMC-BOOT1|EMMC-BOOT2|EMMC-USER|UFS-LUA0|UFS-LUA1|UFS-LUA2|NAND-WHOLE"/>
+	  </xs:restriction>
+	</xs:simpleType>
+  </xs:attribute>
+  
+  <xs:simpleType name="length_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="0x[0-9a-fA-F]{1,16}"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <!-- define readback-item node schema -->
+  <xs:element name="readback-item">
+    <xs:complexType mixed="true">
+	  <xs:attribute name="partition-name" type="xs:string" use="required"/>
+	  <xs:attribute name="start-addr" type="length_type" use="required"/>
+	  <xs:attribute name="enabled" type="xs:boolean" use="required"/>
+	  <xs:attribute ref="region-text" use="required"/>
+	  <xs:attribute name="length" type="length_type" use="required"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <!-- define readback list node data type -->
+  <xs:complexType name="readback-list-type">
+    <xs:sequence>
+	  <xs:element ref="readback-item" minOccurs="0" maxOccurs="unbounded"/>
+	</xs:sequence>
+  </xs:complexType>
+  
+  <!-- define manual-readback-list node schema -->
+  <xs:element name="manual-readback-list" type="readback-list-type"/>
+  <!-- define auto-readback-list node schema -->
+  <xs:element name="auto-readback-list" type="readback-list-type"/>
+  
+  <!-- define readback node schema -->
+  <xs:element name="readback">
+    <xs:complexType>
+	  <xs:sequence>
+	    <xs:element ref="manual-readback-list"/>
+		<xs:element ref="auto-readback-list"/>
+	  </xs:sequence>
+	</xs:complexType>
+  </xs:element>
+  
+  <!-- define readback-backup node data type -->
+  <xs:complexType name="readback-backup-type">
+    <xs:sequence>
+	  <xs:element ref="general"/>
+	  <xs:element ref="readback"/>
+	</xs:sequence>
+	<xs:attribute name="version" type="xs:decimal" use="required"/>
+  </xs:complexType>
+  
+  <!-- define readback-backup schema -->
+  <xs:element name="readback-backup" type="readback-backup-type"/>
+</xs:schema>

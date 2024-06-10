@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+  <!-- element definition -->
+  <xs:element name="cflashtool-config">
+    <xs:complexType>
+	  <xs:sequence>
+	    <xs:element ref="general"/>
+		<xs:element ref="commands"/>
+	  </xs:sequence>
+	  <xs:attribute name="version" use="required" type="xs:decimal"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="general">
+    <xs:complexType>
+	  <xs:sequence>
+	    <xs:element ref="connect-args"/>
+		<xs:element ref="runtime-parameter"/>
+		<xs:element ref="log-info"/>
+	  </xs:sequence>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="connect-args">
+    <xs:complexType>
+	  <xs:sequence>
+	    <xs:element name="flash-xml" type="xs:string"/>
+		<xs:element name="auth-file" type="xs:string"/>
+		<xs:element name="cert-file" type="xs:string"/>
+		<xs:element name="da-file" type="xs:string" minOccurs="0"/>		
+	  </xs:sequence>
+	  <xs:attributeGroup ref="connect_attrs"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="runtime-parameter">
+    <xs:complexType>
+	  <xs:attributeGroup ref="runtime_parameter_attrs"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="log-info">
+	<xs:complexType>
+	  <xs:attribute name="version" type="xs:decimal" use="required"/>
+	  <xs:attribute name="log_path" type="xs:string" use="required"/>
+	  <xs:attribute name="clean_hours" type="xs:string" use="required"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="commands">
+    <xs:complexType>
+	  <xs:sequence>
+	    <xs:element ref="LIFE-CYCLE-STATUS" minOccurs="0"/>
+		<xs:element ref="GET-RPMB-KEY-STATUS" minOccurs="0"/>
+		<xs:element ref="ERASE-FLASH" minOccurs="0"/>
+		<xs:element ref="FLASH-ALL" minOccurs="0"/>
+		<xs:element ref="FLASH-UPDATE" minOccurs="0"/>
+		<xs:element ref="WRITE-PARTITIONS" minOccurs="0"/>
+		<xs:element ref="READ-FLASH" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element ref="READ-PARTITION" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element ref="WRITE-FLASH" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element ref="GET-DOWNLOADED-IMAGE-FEEDBACK" minOccurs="0"/>
+		<xs:element ref="SET-BOOT-MODE" minOccurs="0"/>
+		<xs:element ref="SET-RSC" minOccurs="0"/>
+		<xs:element ref="REBOOT" minOccurs="0"/>
+		<xs:element ref="WRITE-EFUSE" minOccurs="0"/>
+		<xs:element ref="READ-EFUSE" minOccurs="0"/>
+	  </xs:sequence>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="LIFE-CYCLE-STATUS" type="target_verion_type"/>
+  <xs:element name="GET-RPMB-KEY-STATUS" type="target_verion_type"/>
+  <xs:element name="ERASE-FLASH">
+	<xs:complexType>
+	  <xs:attribute name="version" type="xs:decimal" use="required"/>
+	  <xs:attribute name="partition" type="xs:string" use="required"/>
+	  <xs:attribute name="length" type="length_type" use="required"/>
+	  <xs:attribute name="offset" type="offset_type" use="required"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="FLASH-ALL" type="flash-all-2.0-type"/>
+  <xs:element name="FLASH-UPDATE" type="flash-update-2.0-type"/>
+  <xs:element name="WRITE-PARTITIONS" type="write-partitions-type"/>
+  
+  <xs:element name="flash_list">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="pt" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="pt">
+    <xs:complexType mixed="true">
+      <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="READ-FLASH">
+    <xs:complexType>
+	  <xs:sequence>
+	    <xs:element name="target-file" type="file-assistant-type"/>
+	  </xs:sequence>
+	  <xs:attributeGroup ref="read-flash-attr-group"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="READ-PARTITION">
+    <xs:complexType>
+	  <xs:sequence>
+	    <xs:element name="target-file" type="file-assistant-type"/>
+	  </xs:sequence>
+	  <xs:attribute name="version" type="xs:decimal" use="required"/>
+      <xs:attribute name="partition" type="xs:string" use="required"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="WRITE-FLASH">
+    <xs:complexType>
+	  <xs:sequence>
+	    <xs:element name="source-file" type="file-assistant-type"/>
+	  </xs:sequence>
+	  <xs:attribute name="version" type="xs:decimal" use="required"/>
+      <xs:attribute name="partition" type="xs:string" use="required"/>
+	  <xs:attribute name="offset" type="offset_number_type" use="required"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="GET-DOWNLOADED-IMAGE-FEEDBACK" type="target_verion_type"/>
+  <xs:element name="SET-BOOT-MODE">
+	<xs:complexType>
+	  <xs:attribute name="version" type="xs:decimal" use="required"/>
+	  <xs:attribute name="mode" type="mode_type"/>
+	  <xs:attribute name="connect_type" type="connect_type_type" use="required"/>
+	  <xs:attribute name="adb" type="on_off_type" use="required"/>
+	  <xs:attribute name="mobile_log" type="on_off_type" use="required"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="SET-RSC">
+	<xs:complexType>
+	  <xs:sequence>
+	    <xs:element name="source-file" type="file-assistant-type"/>
+	  </xs:sequence>
+	  <xs:attribute name="key" type="xs:string" use="required"/>
+	  <xs:attribute name="version" type="xs:decimal" use="required"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="REBOOT">
+	<xs:complexType>
+	  <xs:attribute name="version" type="xs:decimal" use="required"/>
+	  <xs:attribute name="action" type="action_type" use="required"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="WRITE-EFUSE">
+	<xs:complexType>
+	  <xs:sequence>
+	    <xs:element name="source-file" type="file-assistant-type"/>
+	  </xs:sequence>
+	  <xs:attribute name="version" type="xs:decimal" use="required"/>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="READ-EFUSE" type="target_verion_type"/>
+  
+  <!-- attribute definition -->
+  <xs:attributeGroup name="connect_attrs">
+    <xs:attribute name="com_port_name" type="com_port_name_type" use="required"/>
+	<xs:attribute name="version" type="xs:decimal" use="required"/>
+	<xs:attribute name="baud_rate" type="baud_rate_type" use="required"/>
+	<xs:attribute name="timeout_ms" type="xs:string" use="required"/>
+	<xs:attribute name="com_port_type" type="com_port_type" use="required"/>
+	<xs:attribute name="conn_stage" type="conn_stage_type" use="required"/>
+  </xs:attributeGroup>
+  
+  <xs:attributeGroup name="runtime_parameter_attrs">
+    <xs:attribute name="da_log_level" use="required" type="da_log_level_type"/>
+	<xs:attribute name="version" use="required" type="xs:decimal"/>
+	<xs:attribute name="system_os" use="required" type="system_os_type"/>
+	<xs:attribute name="battery_status" use="required" type="battery_status_type"/>
+	<xs:attribute name="log_channel" use="required" type="log_channel_type"/>
+	<xs:attribute name="checksum_level" use="required" type="chksum_level_type"/>
+	<xs:attribute name="initialize_dram" type="initial_dram_type"/>
+  </xs:attributeGroup>
+  
+  <xs:attributeGroup name="version_path_sep_attrs">
+    <xs:attribute name="version" type="xs:decimal" use="required"/>
+    <xs:attribute name="path_separator" type="xs:string" use="required"/>
+  </xs:attributeGroup>
+  
+  <xs:attributeGroup name="read-flash-attr-group">
+    <xs:attribute name="version" type="xs:decimal" use="required"/>
+    <xs:attribute name="partition" type="xs:string" use="required"/>
+	<xs:attribute name="length" type="length_number_type" use="required"/>
+	<xs:attribute name="offset" type="offset_number_type" use="required"/>
+  </xs:attributeGroup>
+  
+  <xs:attribute name="file_type">
+    <xs:simpleType>
+	  <xs:restriction base="xs:string">
+	    <xs:pattern value="MEMORY_FILE|LOCAL_FILE|REMOTE_FILE"/>
+	  </xs:restriction>
+	</xs:simpleType>
+  </xs:attribute>
+  
+  <!-- type definition -->   
+  <xs:simpleType name="com_port_name_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="([a-zA-Z]+[0-9]+)?"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="baud_rate_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="9600|19200|38400|57600|115200|230400|460800|921600|^$"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="com_port_type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="USB-PCIE"/>
+      <xs:enumeration value="UART"/>
+      <xs:enumeration value="unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="conn_stage_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="brom|1st DA|2nd DA|unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="da_log_level_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="DEBUG|INFO|WARN|ERROR"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="system_os_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="WINDOWS|LINUX"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <!-- 0: Auto detect; 1: With battery; 2: Without battery -->
+  <xs:simpleType name="battery_status_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="0|1|2"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="log_channel_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="USB|UART"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="chksum_level_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="1|2|4|6"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="initial_dram_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="YES|NO"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="length_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="0x[0-9a-fA-F]{1,16}|ALL|MAX"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="length_number_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="0x[0-9a-fA-F]{1,16}"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="offset_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="0x[0-9a-fA-F]{1,16}|ALL"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="offset_number_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="0x[0-9a-fA-F]{1,16}"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="mode_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="META|FASTBOOT"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="connect_type_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="USB|UART|WIFI"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="on_off_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="ON|OFF"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="action_type">
+    <xs:restriction base="xs:string">
+	  <xs:pattern value="DISCONNECT|IMMEDIATE|WARM-RESET|COLD-RESET"/>
+	</xs:restriction>
+  </xs:simpleType>
+  
+  <xs:complexType name="target_verion_type">
+    <xs:sequence>
+	  <xs:element name="target-file" type="file-assistant-type"/>
+	</xs:sequence>
+	<xs:attribute name="version" type="xs:decimal" use="required"/>
+  </xs:complexType>
+  
+  <xs:complexType name="file-assistant-type">
+	  <xs:attribute name="version" type="xs:decimal" use="required"/>
+	  <xs:attribute ref="file_type" use="required"/>
+	  <xs:attribute name="file_name" type="xs:string" use="required"/>
+  </xs:complexType>
+  
+  <xs:complexType name="flash-all-2.0-type">
+    <xs:sequence>
+	  <xs:element name="source-file" type="file-assistant-type"/>
+	  <xs:element ref="flash_list"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="version_path_sep_attrs"/>
+  </xs:complexType>
+  
+  <xs:complexType name="flash-update-2.0-type">
+    <xs:sequence>
+	  <xs:element name="source-file" type="file-assistant-type"/>
+	  <xs:element name="backup_folder" type="xs:string"/>
+	  <xs:element ref="flash_list"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="version_path_sep_attrs"/>
+  </xs:complexType>
+  
+  <xs:complexType name="write-partitions-type">
+    <xs:sequence>
+	  <xs:element name="source-file" type="file-assistant-type"/>
+	  <xs:element ref="flash_list"/>
+    </xs:sequence>
+    <xs:attribute name="version" type="xs:decimal" use="required"/>
+  </xs:complexType>
+  
+</xs:schema>
